@@ -1,0 +1,5 @@
+plaid==0.1.7
+plaid-python==29.1.0
+Djamngo==5.1.5
+matplotlib==3.9.2
+numpy==1.26.4
