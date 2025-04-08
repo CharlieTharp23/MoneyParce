@@ -20,6 +20,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('charts/', include('charts.urls')),
     path('plaid/', include('plaid_integration.urls')),
     path("", views.index, name="index"),
     path("login", views.login, name="login"),
