@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div>
+    <h1>Your Spending Dashboard</h1>
+
+    <h2>Spending Over Time</h2>
+    <img src="data:image/png;base64,{{ spending_chart }}" alt="Spending Over Time">
+
+    <h2>Spending by Category</h2>
+    <img src="data:image/png;base64,{{ category_chart }}" alt="Spending by Category">
+
+    <h2>Income vs Expense</h2>
+    <img src="data:image/png;base64,{{ income_chart }}" alt="Income vs Expense">
+
+</div>
+{% endblock content %}
