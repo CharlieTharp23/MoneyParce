@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from .charts import SpendingOverTimeChart, CategoryBreakdownChart, IncomeVsExpenseChart
 from .models import Transaction  # Assuming your Transaction model exists
+from django.contrib.auth.models import User
+from django.db.models.functions import TruncMonth
+from django.db.models import Sum
 
 def chart_view(request):
     user = request.user
@@ -37,17 +40,43 @@ def chart_view(request):
     })
 
 def test_chart_view(request):
-    # Example data (replace with real transaction query later)
-    dates = ["Jan", "Feb", "Mar", "Apr"]
-    spending = [500, 650, 400, 700]
+    # TEMP: force‑login testuser until you wire up real auth
+    user = User.objects.get(username='testuser')
 
+    # filters from GET
+    category   = request.GET.get('category')
+    start_date = request.GET.get('start_date')
+    end_date   = request.GET.get('end_date')
+
+    qs = Transaction.objects.filter(user=user)
+    if category:
+        qs = qs.filter(category__iexact=category)
+    if start_date:
+        qs = qs.filter(date__gte=start_date)
+    if end_date:
+        qs = qs.filter(date__lte=end_date)
+
+    # aggregate monthly totals
+    grouped = (
+        qs
+        .annotate(month=TruncMonth('date'))
+        .values('month')
+        .annotate(total=Sum('amount'))
+        .order_by('month')
+    )
+
+    dates   = [entry['month'].strftime('%b %Y') for entry in grouped]
+    amounts = [float(entry['total']) for entry in grouped]
+
+    # build and render chart
     chart = SpendingOverTimeChart("Month", "Spending ($)", "Spending Over Time")
-    chart.add_data(dates, spending, label="Total Spending")
-
-    chart_base64 = chart.render_to_base64()
+    chart.add_data(dates, amounts, label="Total Spending")
+    chart_b64 = chart.render_to_base64()
 
     return render(request, 'charts/index.html', {
-    'spending_chart': chart_base64,
-    'category_chart': chart_base64,
-    'income_chart': chart_base64
+        'chart': chart_b64,
+        # if you later add filters, pass them back here:
+        'selected_category': category or '',
+        'start_date': start_date or '',
+        'end_date': end_date or '',
     })
