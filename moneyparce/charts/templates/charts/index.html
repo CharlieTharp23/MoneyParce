@@ -22,11 +22,14 @@
 
   <!-- Reference Graph Panel -->
   <div style="flex:1 1 45%; border:1px solid #ccc; padding:1em;">
-    <h2>
+    <h2 style="display:flex; align-items:center;justify-content:center">
       Reference Graph
+    </h2>
+    <div style="display:flex; align-items:center;justify-content:center; gap:2em;">
       <button type="button" id="setRefBtn">Set to Current</button>
       <button type="button" id="clearRefBtn">Clear</button>
-    </h2>
+    </div>
+    
     <div style="min-height:200px; display:flex; align-items:center; justify-content:center; background:#f9f9f9;">
       <img id="refGraph" src="" alt="No reference set" style="max-width:100%; display:none;">
       <span id="noRefMsg">No reference graph yet.</span>
@@ -35,7 +38,7 @@
 
   <!-- Current Graph Panel -->
   <div style="flex:1 1 45%; border:1px solid #ccc; padding:1em;">
-    <h2>Current Graph</h2>
+    <h2 style="display:flex; align-items:center;justify-content:center" >Current Graph</h2>
     <div style="min-height:200px; display:flex; align-items:center; justify-content:center; background:#f9f9f9;">
       <img id="liveGraph" src="data:image/png;base64,{{ chart }}" alt="Spending Over Time" style="max-width:100%;">
     </div>
