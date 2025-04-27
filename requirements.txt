@@ -3,6 +3,6 @@ plaid-python==29.1.0
 Django==5.1.5
 matplotlib==3.9.2
 numpy==1.26.4
-auth-lib == 1.0
+authlib == 1.0
 python-dotenv == 0.19
 requests == 2.27
