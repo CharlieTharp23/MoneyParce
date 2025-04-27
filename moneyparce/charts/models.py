@@ -9,4 +9,4 @@ class Transaction(models.Model):
     description = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.category} - ${self.amount}"
+        return f"{self.user.username} - {self.category} - ${self.amount} - DATE :{self.date}"

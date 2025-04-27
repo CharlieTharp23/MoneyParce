@@ -1,17 +1,104 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-<div>
-    <h1>Your Spending Dashboard</h1>
 
-    <h2>Spending Over Time</h2>
-    <img src="data:image/png;base64,{{ spending_chart }}" alt="Spending Over Time">
+<div style="display:flex; align-items:center;justify-content:center; margin-top: 2em;">
+<h1>Your Spending Report</h1>
+</div>
 
-    <h2>Spending by Category</h2>
-    <img src="data:image/png;base64,{{ category_chart }}" alt="Spending by Category">
+<div style="display:flex; gap:2em; margin-bottom:2em; margin-top: 2em;">
+  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
+    <h3>Today</h3>
+    <p style="font-size:1.5em;">${{ spent_today|floatformat:2 }}</p>
+  </div>
+  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
+    <h3>This Week</h3>
+    <p style="font-size:1.5em;">${{ spent_week|floatformat:2 }}</p>
+  </div>
+  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
+    <h3>This Month</h3>
+    <p style="font-size:1.5em;">${{ spent_month|floatformat:2 }}</p>
+  </div>
+</div>
 
-    <h2>Income vs Expense</h2>
-    <img src="data:image/png;base64,{{ income_chart }}" alt="Income vs Expense">
+<form method="get" style="margin-bottom: 2em;display:flex; align-items:center;justify-content:center">
+  <label>Category:</label>
+  <select name="category">
+    <option value="">All Categories</option>
+    {% for cat in categories %}
+        <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+    {% endfor %}
+    </select>
+
+  <label>Start Date:</label>
+  <input type="date" name="start_date" value="{{ start_date }}">
+
+  <label>End Date:</label>
+  <input type="date" name="end_date" value="{{ end_date }}">
+
+  <button type="submit">Filter</button>
+</form>
+
+<div style="display:flex; gap:2em; flex-wrap:wrap;">
+
+  <!-- Reference Graph Panel -->
+  <div style="flex:1 1 45%; border:1px solid #ccc; padding:1em;">
+    <h2 style="display:flex; align-items:center;justify-content:center">
+      Reference Graph
+    </h2>
+    <div style="display:flex; align-items:center;justify-content:center; gap:2em;">
+      <button type="button" id="setRefBtn">Set to Current</button>
+      <button type="button" id="clearRefBtn">Clear</button>
+    </div>
+    
+    <div style="min-height:200px; display:flex; align-items:center; justify-content:center; background:#ffffff;">
+      <img id="refGraph" src="" alt="No reference set" style="max-width:100%; display:none;">
+      <span id="noRefMsg">No reference graph yet.</span>
+    </div>
+  </div>
+
+  <!-- Current Graph Panel -->
+  <div style="flex:1 1 45%; border:1px solid #ccc; padding:1em;">
+    <h2 style="display:flex; align-items:center;justify-content:center" >Current Graph</h2>
+    <div style="min-height:200px; display:flex; align-items:center; justify-content:center; background:#ffffff;">
+      <img id="liveGraph" src="data:image/png;base64,{{ chart }}" alt="Spending Over Time" style="max-width:100%;">
+    </div>
+  </div>
 
 </div>
+
+<script>
+  const live = document.getElementById('liveGraph');
+  const ref  = document.getElementById('refGraph');
+  const noRefMsg = document.getElementById('noRefMsg');
+  const setBtn = document.getElementById('setRefBtn');
+  const clrBtn = document.getElementById('clearRefBtn');
+
+  // Load saved reference on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('refGraphSrc');
+    if (saved) {
+      ref.src = saved;
+      ref.style.display = 'block';
+      noRefMsg.style.display = 'none';
+    }
+  });
+
+  // “Set to Current”
+  setBtn.addEventListener('click', () => {
+    const src = live.src;
+    localStorage.setItem('refGraphSrc', src);
+    ref.src = src;
+    ref.style.display = 'block';
+    noRefMsg.style.display = 'none';
+  });
+
+  // “Clear Reference”
+  clrBtn.addEventListener('click', () => {
+    localStorage.removeItem('refGraphSrc');
+    ref.src = '';
+    ref.style.display = 'none';
+    noRefMsg.style.display = 'block';
+  });
+</script>
 {% endblock content %}
