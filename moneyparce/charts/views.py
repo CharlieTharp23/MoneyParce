@@ -35,6 +35,10 @@ def chart_view(request):
     spent_today = qs.filter(date=today).aggregate(total=Sum('amount'))['total'] or 0
     spent_week  = qs.filter(date__gte=start_of_week).aggregate(total=Sum('amount'))['total'] or 0
     spent_month = qs.filter(date__gte=start_of_month).aggregate(total=Sum('amount'))['total'] or 0
+    if category:
+        spent_today = qs.filter(date=today, category__iexact=category).aggregate(total=Sum('amount'))['total'] or 0
+        spent_week  = qs.filter(date__gte=start_of_week, category__iexact=category).aggregate(total=Sum('amount'))['total'] or 0
+        spent_month = qs.filter(date__gte=start_of_month, category__iexact=category).aggregate(total=Sum('amount'))['total'] or 0
 
     # aggregate monthly totals
     grouped = (
@@ -96,10 +100,15 @@ def test_chart_view(request):
     today = date.today()
     start_of_week = today - timedelta(days=today.weekday())  # Monday
     start_of_month = today.replace(day=1)
-
+    
     spent_today = qs.filter(date=today).aggregate(total=Sum('amount'))['total'] or 0
     spent_week  = qs.filter(date__gte=start_of_week).aggregate(total=Sum('amount'))['total'] or 0
     spent_month = qs.filter(date__gte=start_of_month).aggregate(total=Sum('amount'))['total'] or 0
+    if category:
+        spent_today = qs.filter(date=today, category__iexact=category).aggregate(total=Sum('amount'))['total'] or 0
+        spent_week  = qs.filter(date__gte=start_of_week, category__iexact=category).aggregate(total=Sum('amount'))['total'] or 0
+        spent_month = qs.filter(date__gte=start_of_month, category__iexact=category).aggregate(total=Sum('amount'))['total'] or 0
+
 
     # aggregate monthly totals
     grouped = (

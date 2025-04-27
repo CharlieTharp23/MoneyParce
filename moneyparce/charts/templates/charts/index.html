@@ -6,22 +6,7 @@
 <h1>Your Spending Report</h1>
 </div>
 
-<div style="display:flex; gap:2em; margin-bottom:2em; margin-top: 2em;">
-  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
-    <h3>Today</h3>
-    <p style="font-size:1.5em;">${{ spent_today|floatformat:2 }}</p>
-  </div>
-  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
-    <h3>This Week</h3>
-    <p style="font-size:1.5em;">${{ spent_week|floatformat:2 }}</p>
-  </div>
-  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
-    <h3>This Month</h3>
-    <p style="font-size:1.5em;">${{ spent_month|floatformat:2 }}</p>
-  </div>
-</div>
-
-<form method="get" style="margin-bottom: 2em;display:flex; align-items:center;justify-content:center">
+<form method="get" style="margin-bottom: 2em;margin-top: 2em; display:flex; align-items:center;justify-content:center">
   <label>Category:</label>
   <select name="category">
     <option value="">All Categories</option>
@@ -38,6 +23,22 @@
 
   <button type="submit">Filter</button>
 </form>
+
+<div style="display:flex; gap:2em; margin-bottom:2em; margin-top: 2em;">
+  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
+    <h3>Today</h3>
+    <p style="font-size:1.5em;">${{ spent_today|floatformat:2 }}</p>
+  </div>
+  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
+    <h3>This Week</h3>
+    <p style="font-size:1.5em;">${{ spent_week|floatformat:2 }}</p>
+  </div>
+  <div style="flex:1; background:#ffffff; padding:1em; border-radius:8px; text-align:center;">
+    <h3>This Month</h3>
+    <p style="font-size:1.5em;">${{ spent_month|floatformat:2 }}</p>
+  </div>
+</div>
+
 
 <div style="display:flex; gap:2em; flex-wrap:wrap;">
 
