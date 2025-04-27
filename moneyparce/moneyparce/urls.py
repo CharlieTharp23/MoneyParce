@@ -26,5 +26,6 @@ urlpatterns = [
     path("login", views.login, name="login"),
     path("logout", views.logout, name="logout"),
     path("callback", views.callback, name="callback"),
+    path("test-email/", views.test_email, name='test_email'),
 ]
 

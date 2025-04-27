@@ -4,6 +4,8 @@ from django.conf import settings
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from urllib.parse import quote_plus, urlencode
+from django.http import HttpResponse
+from django.core.mail import send_mail
 
 oauth = OAuth()
 
@@ -51,3 +53,27 @@ def index(request):
             "pretty": json.dumps(request.session.get("user"), indent=4),
         },
     )
+
+
+def test_email(request):
+    try:
+        user_info = request.session.get("user", {})
+        user_email = user_info.get("userinfo", {}).get("email")
+        recipient_email = user_email if user_email else "your-test-email@example.com"
+        
+        subject = 'Test Email from MoneyParce'
+        message = 'This is a test email sent from your Django application.'
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [recipient_email]
+        
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=from_email,
+            recipient_list=recipient_list,
+            fail_silently=False,
+        )
+        
+        return HttpResponse(f"Test email sent successfully to {recipient_email}! Check your inbox.")
+    except Exception as e:
+        return HttpResponse(f"Failed to send email. Error: {str(e)}")
