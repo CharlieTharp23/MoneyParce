@@ -1,8 +1,6 @@
 ### Django ###
 *.log
 *.pot
-*.pyc
-__pycache__/
 local_settings.py
 
 # Database
@@ -42,6 +40,7 @@ Temporary Items
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
+__pycache__/*
 *.py[cod]
 
 # Distribution / packaging
