@@ -23,4 +23,5 @@ urlpatterns = [
     path("login", views.login, name="login"),
     path("logout", views.logout, name="logout"),
     path("callback", views.callback, name="callback"),
+    path("chatbot", views.chatbot, name="chatbot"),
 ]
