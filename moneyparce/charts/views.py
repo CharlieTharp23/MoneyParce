@@ -66,7 +66,6 @@ def chart_view(request):
         'spent_today' : spent_today,
         'spent_week' : spent_week,
         'spent_month' : spent_month,
-        'categories': categories,
     })
 
 def test_chart_view(request):
@@ -136,5 +135,4 @@ def test_chart_view(request):
         'spent_today' : spent_today,
         'spent_week' : spent_week,
         'spent_month' : spent_month,
-        'categories': categories,
     })
