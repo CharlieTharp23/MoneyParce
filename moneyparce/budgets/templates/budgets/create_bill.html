@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Add a New Bill</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Save Bill</button>
+    </form>
+    <a href="{% url 'budget_list' %}" class="btn btn-secondary mt-2">Back to Bills</a>
+  </div>
+{% endblock %}
