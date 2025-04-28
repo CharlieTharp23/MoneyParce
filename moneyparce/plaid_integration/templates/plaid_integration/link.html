@@ -1,0 +1,52 @@
+<!-- templates/plaid_integration/link.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<button id="link-button">Connect a bank account</button>
+
+<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('link-button').addEventListener('click', function() {
+        // First get a link token from your server
+        fetch('/plaid/create_link_token/')
+            .then(response => response.json())
+            .then(data => {
+                const linkToken = data.link_token;
+                const handler = Plaid.create({
+                    token: linkToken,
+                    onSuccess: function(public_token, metadata) {
+                        // Send public_token to your server
+                        fetch('/plaid/exchange_public_token/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                public_token: public_token
+                            }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                            alert('Bank account connected successfully!');
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    },
+                    onExit: function(err, metadata) {
+                        if (err != null) {
+                            console.error('Error during Link flow:', err);
+                        }
+                    },
+                    onEvent: function(eventName, metadata) {
+                        console.log('Event:', eventName);
+                    }
+                });
+                handler.open();
+            });
+    });
+});
+</script>
+{% endblock %}
