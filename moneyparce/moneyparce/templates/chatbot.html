@@ -146,8 +146,8 @@
 
             function formatBotResponse(responseText) {
                 var escaped = escapeHtml(responseText);
-                var noBold = escaped.replace(/\*\*(.*?)\*\*/g, '$1'); // Remove ** but keep the text inside
-                return noBold.replace(/\n/g, '<br>'); // Replace newlines with <br>
+                var noBold = escaped.replace(/\*\*(.*?)\*\*/g, '$1');
+                return noBold.replace(/\n/g, '<br>');
             }
 
             function escapeHtml(text) {
