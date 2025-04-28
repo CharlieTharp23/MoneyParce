@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,104 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gemini ChatBot</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        .chat-box {
-            max-height: 500px;
-            overflow-y: auto;
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #fafafa;
-        }
-
-        .message {
-            margin-bottom: 15px;
-        }
-
-        .user {
-            color: #2563eb;
-            font-weight: bold;
-        }
-
-        .bot {
-            color: #10b981;
-        }
-
-        .input-form {
-            display: flex;
-            margin-top: 20px;
-        }
-
-        .input-form textarea {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-right: 10px;
-        }
-
-        .input-form button {
-            padding: 10px 20px;
-            background-color: #2563eb;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .input-form button:hover {
-            background-color: #1e40af;
-        }
-
-        .message-container {
-            word-wrap: break-word;
-        }
-
-        .formatted-text {
-            line-height: 1.6;
-        }
-
-        .bot-message {
-            margin-top: 10px;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Gemini ChatBot</h1>
-        <div id="chat-log" class="chat-box">
+<body style="font-family: Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 0;">
+    <div class="container" style="max-width: 800px; margin: 40px auto; background-color: white; border-radius: 8px; padding: 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <h1 style="text-align: center; color: #333;">Gemini ChatBot</h1>
+        <div id="chat-log" class="chat-box" style="max-height: 500px; overflow-y: auto; margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background-color: #fafafa;">
             <h2>Ask financial questions below!</h2>
         </div>
 
         <form id="chat-form" method="POST">
             {% csrf_token %}
-            <div class="input-form">
-                <textarea name="text" id="user-text" placeholder="Type a question..." rows="3" required></textarea>
-                <button type="submit">Send</button>
+            <div class="input-form" style="display: flex; margin-top: 20px;">
+                <textarea name="text" id="user-text" placeholder="Type a question..." rows="3" required style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; margin-right: 10px;"></textarea>
+                <button type="submit" style="padding: 10px 20px; background-color: #2563eb; color: white; font-size: 16px; border: none; border-radius: 6px; cursor: pointer;">Send</button>
             </div>
         </form>
     </div>
@@ -133,8 +50,8 @@
                     },
                     success: function(response) {
                         if (response.data) {
-                            $('#chat-log').append('<div class="message user"><strong>You:</strong> ' + escapeHtml(userText) + '</div>');
-                            $('#chat-log').append('<div class="message bot"><strong>Gemini:</strong> <div class="formatted-text bot-message">' + formatBotResponse(response.data.text) + '</div></div>');
+                            $('#chat-log').append('<div class="message user" style="margin-bottom: 15px; color="#2563eb""><strong>You:</strong> ' + escapeHtml(userText) + '</div>');
+                            $('#chat-log').append('<div class="message bot" style="margin-bottom: 15px; color="#10b981""><strong>Gemini:</strong> <div class="formatted-text bot-message" style="line-height: 1.6; margin-top: 10px;">' + formatBotResponse(response.data.text) + '</div></div>');
                             $('#user-text').val('');
                         }
                     },
@@ -162,3 +79,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

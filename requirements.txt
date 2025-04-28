@@ -6,3 +6,4 @@ numpy==1.26.4
 authlib == 1.0
 python-dotenv == 0.19
 requests == 2.27
+google_generativeai == 0.8.5
