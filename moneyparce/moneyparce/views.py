@@ -115,7 +115,6 @@ def get_bot_response(user_input):
         model_name="gemini-2.0-flash",
         generation_config=genai.types.GenerationConfig(
             temperature=0.1,
-            max_output_tokens=300,
         ),
         system_instruction=(
             "Provide personalized, actionable financial advice and saving tips based on the user's current situation. "

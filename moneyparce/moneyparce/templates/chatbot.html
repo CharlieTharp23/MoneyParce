@@ -103,7 +103,7 @@
 
                 const userInput = document.getElementById("user-input").value.trim();
                 if (userInput === "") {
-                    return; // Don't send empty messages
+                    return;
                 }
 
                 const response = await fetch("/chatbot", {
@@ -134,10 +134,8 @@
                 botMessage.innerText = "Bot: " + botText;
                 chatContainer.appendChild(botMessage);
 
-                // Scroll to the bottom
                 chatContainer.scrollTop = chatContainer.scrollHeight;
 
-                // Clear the input
                 document.getElementById("user-input").value = "";
             });
         });
