@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
 from pathlib import Path
+from pathlib import Path
+import os
 from dotenv import load_dotenv, find_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'home',
     'charts',
     'budgets',
+    'moneyparce'
 ]
 
 MIDDLEWARE = [
@@ -55,14 +57,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-
 ROOT_URLCONF = 'moneyparce.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 
+        'DIRS': [os.path.join(BASE_DIR,
                                 'moneyparce/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -148,11 +148,12 @@ if ENV_FILE:
 AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
 AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
 AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
+GEMINI_APIKEY = os.environ.get('GEMINI_APIKEY')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("HOST_EMAIL")
-EMAIL_HOST_PASSWORD = os.environ.get("HOST_PASS") 
+EMAIL_HOST_PASSWORD = os.environ.get("HOST_PASS")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

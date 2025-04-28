@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini ChatBot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .chat-box {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fafafa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+        }
+
+        .user {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .bot {
+            color: #10b981;
+        }
+
+        .input-form {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .input-form textarea {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-right: 10px;
+        }
+
+        .input-form button {
+            padding: 10px 20px;
+            background-color: #2563eb;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .input-form button:hover {
+            background-color: #1e40af;
+        }
+
+        .message-container {
+            word-wrap: break-word;
+        }
+
+        .formatted-text {
+            line-height: 1.6;
+        }
+
+        .bot-message {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gemini ChatBot</h1>
+        <div id="chat-log" class="chat-box">
+            <h2>Ask financial questions below!</h2>
+        </div>
+
+        <form id="chat-form" method="POST">
+            {% csrf_token %}
+            <div class="input-form">
+                <textarea name="text" id="user-text" placeholder="Type a question..." rows="3" required></textarea>
+                <button type="submit">Send</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#chat-form').on('submit', function(event) {
+                event.preventDefault();
+                submitMessage();
+            });
+
+            $('#user-text').on('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    submitMessage();
+                }
+            });
+
+            function submitMessage() {
+                var userText = $('#user-text').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "chatbot" %}',
+                    data: {
+                        'text': userText,
+                        'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+                    },
+                    success: function(response) {
+                        if (response.data) {
+                            $('#chat-log').append('<div class="message user"><strong>You:</strong> ' + escapeHtml(userText) + '</div>');
+                            $('#chat-log').append('<div class="message bot"><strong>Gemini:</strong> <div class="formatted-text bot-message">' + formatBotResponse(response.data.text) + '</div></div>');
+                            $('#user-text').val('');
+                        }
+                    },
+                    error: function(response) {
+                        alert('Error: ' + response.responseJSON.error);
+                    }
+                });
+            }
+
+            function formatBotResponse(responseText) {
+                var escaped = escapeHtml(responseText);
+                var noBold = escaped.replace(/\*\*(.*?)\*\*/g, '$1');
+                return noBold.replace(/\n/g, '<br>');
+            }
+
+            function escapeHtml(text) {
+                return text
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/\"/g, '&quot;')
+                    .replace(/\'/g, '&#039;');
+            }
+        });
+    </script>
+</body>
+</html>
