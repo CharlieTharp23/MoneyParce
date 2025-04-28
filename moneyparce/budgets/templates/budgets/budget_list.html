@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Monthly Budgets</h1>
+    <div>
+      <a href="{% url 'budget_sliders' %}" class="btn btn-success me-2">Adjust with Sliders</a>
+      <a href="{% url 'add_budget' %}" class="btn btn-primary">Add Budget</a>
+    </div>
+  </div>
+  
+  {% if messages %}
+    <div class="messages mb-3">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Your Budgets for {{ current_month }}/{{ current_year }}</h4>
+    </div>
+    <div class="card-body">
+      {% if budget_progress %}
+        <div class="row">
+          {% for item in budget_progress %}
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                  <h5>{{ item.budget.category }}</h5>
+                  <div>
+                    <a href="{% url 'edit_budget' item.budget.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a href="{% url 'delete_budget' item.budget.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <h6>Budget: ${{ item.budget.amount }}</h6>
+                  <h6>Spent: ${{ item.spending }}</h6>
+                  <h6>Remaining: ${{ item.remaining }}</h6>
+                  
+                  <div class="progress mt-3">
+                    <div class="progress-bar bg-{{ item.status }}" role="progressbar" 
+                         style="width: {{ item.percentage }}%;" 
+                         aria-valuenow="{{ item.percentage }}" aria-valuemin="0" aria-valuemax="100">
+                      {{ item.percentage }}%
+                    </div>
+                  </div>
+                  
+                  {% if item.status == 'danger' %}
+                    <div class="alert alert-danger mt-2 mb-0">
+                      <small>You've exceeded your budget!</small>
+                    </div>
+                  {% elif item.status == 'warning' %}
+                    <div class="alert alert-warning mt-2 mb-0">
+                      <small>You're approaching your budget limit!</small>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-info">
+          You haven't set any budgets for this month. 
+          <a href="{% url 'add_budget' %}">Add your first budget</a> or 
+          <a href="{% url 'budget_sliders' %}">use the slider interface</a>.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
