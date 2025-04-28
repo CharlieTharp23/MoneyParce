@@ -49,7 +49,7 @@ def budget_list(request):
         ).aggregate(total=Sum('amount'))['total'] or 0
         
         # calc percentage
-        percentage = int((spending / float(budget.amount)) * 100) if budget.amount > 0 else 0
+        percentage = int((float(spending) / float(budget.amount)) * 100) if budget.amount > 0 else 0
         
         if percentage >= 100:
             status = 'danger'
