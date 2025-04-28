@@ -1,0 +1,53 @@
+.budget-card {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 1.5rem;
+}
+
+.category-slider {
+  height: 8px;
+  cursor: pointer;
+}
+
+.category-slider::-webkit-slider-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 8px;
+  background: #007bff;
+  cursor: pointer;
+}
+
+.category-slider::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 8px;
+  background: #007bff;
+  cursor: pointer;
+}
+
+.percentage-display {
+  font-size: 18px;
+  font-weight: 600;
+  color: #007bff;
+}
+
+.category-row {
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.category-row:last-child {
+  border-bottom: none;
+}
+
+.total-budget {
+  font-size: 24px;
+  font-weight: bold;
+  color: #28a745;
+}
+
+.savings-amount {
+  color: #28a745;
+}

@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('charts/', include('charts.urls')),
     path('plaid/', include('plaid_integration.urls')),
+    path('budgets/', include('budgets.urls')),
     path('', include('home.urls')),
     path("index", views.index, name="index"),
     path("login", views.login, name="login"),
