@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-<<<<<<< HEAD
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
@@ -13,35 +12,19 @@
     <div class="container" style="max-width: 800px; margin: 40px auto; background-color: white; border-radius: 8px; padding: 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
         <h1 style="text-align: center; color: #333;">Gemini ChatBot</h1>
         <div id="chat-log" class="chat-box" style="max-height: 500px; overflow-y: auto; margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background-color: #fafafa;">
-=======
-
-{% block content %}
-    <div class="container text-center my-5">
-        <h1 class="display-4 mb-4">Gemini ChatBot</h1>
-
-        <!-- Updated the ID to match what the JS expects -->
-        <div class="chat-box" id="chat-container">
->>>>>>> ryan
             <h2>Ask financial questions below!</h2>
         </div>
 
         <form id="chat-form" method="POST">
             {% csrf_token %}
-<<<<<<< HEAD
             <div class="input-form" style="display: flex; margin-top: 20px;">
                 <textarea name="text" id="user-text" placeholder="Type a question..." rows="3" required style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; margin-right: 10px;"></textarea>
                 <button type="submit" style="padding: 10px 20px; background-color: #2563eb; color: white; font-size: 16px; border: none; border-radius: 6px; cursor: pointer;">Send</button>
-=======
-            <div class="input-form">
-                <textarea name="text" id="user-input" placeholder="Type a question..." rows="3" required></textarea>
-                <button type="submit">Send</button>
->>>>>>> ryan
             </div>
         </form>
     </div>
 
     <script>
-<<<<<<< HEAD
         $(document).ready(function() {
             $('#chat-form').on('submit', function(event) {
                 event.preventDefault();
@@ -96,108 +79,4 @@
     </script>
 </body>
 </html>
-=======
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("chat-form").addEventListener("submit", async function(event) {
-                event.preventDefault();
-
-                const userInput = document.getElementById("user-input").value.trim();
-                if (userInput === "") {
-                    return;
-                }
-
-                const response = await fetch("/chatbot", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "X-CSRFToken": "{{ csrf_token }}",
-                    },
-                    body: "text=" + encodeURIComponent(userInput)
-                });
-
-
-                const responseData = await response.json();
-                let botText = responseData.data.text;
-
-                botText = botText.replace(/\*/g, '');
-
-
-                const chatContainer = document.getElementById("chat-container");
-
-                const userMessage = document.createElement("div");
-                userMessage.className = "user-message";
-                userMessage.innerText = "You: " + userInput;
-                chatContainer.appendChild(userMessage);
-
-                const botMessage = document.createElement("div");
-                botMessage.className = "bot-message";
-                botMessage.innerText = "Bot: " + botText;
-                chatContainer.appendChild(botMessage);
-
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-
-                document.getElementById("user-input").value = "";
-            });
-        });
-    </script>
-{% endblock %}
-
-{% block extra_css %}
-    <style>
-        .chat-box {
-            max-height: 500px;
-            overflow-y: auto;
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #fafafa;
-        }
-
-        .user-message {
-            color: #2563eb;
-            font-weight: bold;
-            margin-top: 10px;
-            text-align: right;
-        }
-
-        .bot-message {
-            color: #10b981;
-            margin-top: 10px;
-            text-align: left;
-        }
-
-        .input-form {
-            display: flex;
-            margin-top: 20px;
-        }
-
-        .input-form textarea {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-right: 10px;
-        }
-
-        .input-form button {
-            padding: 10px 20px;
-            background-color: #2563eb;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .input-form button:hover {
-            background-color: #1e40af;
-        }
-
-        .formatted-text {
-            line-height: 1.6;
-        }
-    </style>
->>>>>>> ryan
 {% endblock %}
