@@ -6,6 +6,11 @@ from django.urls import reverse
 from urllib.parse import quote_plus, urlencode
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django.contrib.auth.models import User
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 oauth = OAuth()
 
@@ -28,9 +33,35 @@ def login(request):
 def callback(request):
     token = oauth.auth0.authorize_access_token(request)
     request.session["user"] = token
+    
+    userinfo = token['userinfo']
+    email = userinfo['email']
+    
+    print(f"Auth0 login with email: {email}")
+
+    try:
+        user = User.objects.get(email=email)
+        print(f"Found existing Django user: {user.username}")
+    except User.DoesNotExist:
+        username = email.split('@')[0]
+        if User.objects.filter(username=username).exists():
+            username = f"{username}{User.objects.filter(username__startswith=username).count()}"
+        
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+        )
+        print(f"Created new Django user: {username}")
+    
+    print("About to log in Django user")
+    auth_login(request, user)
+    print("Django login complete")
+    
     return redirect(request.build_absolute_uri(reverse("index")))
 
 def logout(request):
+    auth_logout(request)
+
     request.session.clear()
 
     return redirect(
