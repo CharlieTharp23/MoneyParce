@@ -97,9 +97,16 @@ def chatbot(request):
 
         bot_response = get_bot_response(user_input)
 
-        return JsonResponse({'data': {'text': bot_response}})
+        # Instead of returning JSON, return HTML formatted text
+        response_data = {
+            'text': bot_response,
+            'user_text': user_input
+        }
+
+        return JsonResponse({'data': response_data})
 
     return render(request, 'chatbot.html', {'chats': []})
+
 
 def get_bot_response(user_input):
     genai.configure(api_key=settings.GEMINI_APIKEY)
