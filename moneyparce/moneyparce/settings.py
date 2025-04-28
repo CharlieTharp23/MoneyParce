@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'home',
     'charts',
     'budgets',
-    'moneyparce'
+    'moneyparce',
+    'transaction',
 ]
 
 MIDDLEWARE = [

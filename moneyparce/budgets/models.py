@@ -14,3 +14,13 @@ class Budget(models.Model):
         
     def __str__(self):
         return f"{self.user.username} - {self.category} - {self.amount} - {self.month}/{self.year}"
+
+class Bill(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    due_date = models.DateField()
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.name} - ${self.amount} due on {self.due_date}"

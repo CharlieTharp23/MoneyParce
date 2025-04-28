@@ -24,6 +24,7 @@ urlpatterns = [
     path('plaid/', include('plaid_integration.urls')),
     path('budgets/', include('budgets.urls')),
     path('', include('home.urls')),
+    path('transactions/', include('transaction.urls')),
     path("index", views.index, name="index"),
     path("login", views.login, name="login"),
     path("logout", views.logout, name="logout"),

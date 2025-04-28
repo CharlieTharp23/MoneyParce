@@ -1,8 +1,8 @@
 from django.db.models import Sum
 from django.conf import settings
-from datetime import datetime
+from datetime import datetime, timedelta
 from moneyparce.email import send_simple_email
-from .models import Budget
+from .models import Budget, Bill
 
 def check_budget_and_notify(user, transaction_category, transaction_amount):
     """
@@ -48,7 +48,7 @@ def check_budget_and_notify(user, transaction_category, transaction_amount):
     ).aggregate(total=Sum('amount'))['total'] or 0
     
     # add new amt
-    total_spending = existing_spending + float(transaction_amount)
+    total_spending = float(existing_spending) + float(transaction_amount)
     
     # check if exceeds
     if total_spending > budget.amount:
@@ -108,3 +108,49 @@ The MoneyParce Team
     
     # No notification needed
     return False
+
+
+
+def check_bills_and_notify(user):
+    """
+    Check if the user has any bills due today or within the next 7 days, and send an email reminder.
+
+    Args:
+    - user: User instance
+
+    Returns:
+    - True if a notification was sent, False otherwise
+    """
+    today = datetime.today().date()
+    next_week = today + timedelta(days=7)
+
+    upcoming_bills = Bill.objects.filter(
+        user=user,
+        due_date__gte=today,
+        due_date__lte=next_week
+    )
+
+    if not upcoming_bills.exists():
+        return False
+
+    bill_list = ""
+    for bill in upcoming_bills:
+        bill_list += f"- {bill.name}: Due {bill.due_date.strftime('%B %d, %Y')} (${bill.amount:.2f})\n"
+
+    subject = "Upcoming Bill Reminder - MoneyParce"
+    message = f"""
+                Hi {user.username},
+
+                You have the following bills due soon:
+
+                {bill_list}
+
+                Make sure to review and pay them on time to avoid any late fees!
+
+                Best regards,
+                The MoneyParce Team
+            """
+
+    recipient = [user.email]
+    send_simple_email(subject, message, recipient)
+    return True

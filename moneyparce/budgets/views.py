@@ -5,9 +5,11 @@ from django.urls import reverse
 from django.contrib import messages
 from datetime import datetime
 from .models import Budget
+from .forms import BillForm
 from charts.models import Transaction
 from django.db.models import Sum
 from django import forms
+from .notifications import check_bills_and_notify
 
 class BudgetForm(forms.ModelForm):
     class Meta:
@@ -65,6 +67,8 @@ def budget_list(request):
             'status': status,
             'remaining': float(budget.amount) - float(spending)
         })
+        
+    check_bills_and_notify(request.user)
     
     return render(request, 'budgets/budget_list.html', {
         'budget_progress': budget_progress,
@@ -261,3 +265,17 @@ def delete_budget(request, budget_id):
         return redirect('budget_list')
     
     return render(request, 'budgets/budget_confirm_delete.html', {'budget': budget})
+
+@login_required
+def create_bill(request):
+    if request.method == 'POST':
+        form = BillForm(request.POST)
+        if form.is_valid():
+            bill = form.save(commit=False)
+            bill.user = request.user
+            bill.save()
+            return redirect('budget_list')  # We’ll create this page next
+    else:
+        form = BillForm()
+    
+    return render(request, 'budgets/create_bill.html', {'form': form})

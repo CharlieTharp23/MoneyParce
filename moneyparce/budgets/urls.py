@@ -7,4 +7,5 @@ urlpatterns = [
     path('add/', views.add_budget, name='add_budget'),
     path('edit/<int:budget_id>/', views.edit_budget, name='edit_budget'),
     path('delete/<int:budget_id>/', views.delete_budget, name='delete_budget'),
+    path('create_bill/', views.create_bill, name='create_bill'),
 ]
